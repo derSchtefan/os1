@@ -3,7 +3,7 @@ BITS 16
 STACK_END equ 0x0500
 STACK_START equ 0x7000
 STACK_START_2 equ 0x7FFF
-KERNEL_START equ 0x8000
+KERNEL_START equ 0xF000
 
 [org 0x7c00]
 section BOOT start=0x7C00
@@ -71,7 +71,7 @@ BITS 32
     MOV   FS, EAX
     MOV   GS, EAX
     MOV   SS, EAX
-    MOV   ESP, STACK_START_2
+    
 
 
 
@@ -84,20 +84,12 @@ BITS 32
     MOV EDX, 80
     CALL STROUT_32BIT
 
-    MOV EAX, HALTED
-    MOV EDX, 2 * 80
-    CALL STROUT_32BIT
-
-
-    
-    jmp $
-
-sti
+; sti
     ; jump to next section
+    MOV   ESP, STACK_START_2
     jmp CODE_SEL:KERNEL_START
 
 BOOTING_KERNEL_MESSAGE: db '32 bit enabled. Interrupts disabled. Booting Kernel Loader', 0
-HALTED: db 'KERNEL LOAD HALTED. NOT IMPLEMENTED', 0
 
 STROUT_32BIT:
     shl EDX, 1
@@ -165,5 +157,6 @@ INITIAL_GDT_END_DESCRIPTOR:
 
 times 508-($-$$) db 0
 KERNEL_SECT_START db 2
-KERNEL_SECT_COUNT db 64
+;KERNEL_SECT_COUNT db 64
+KERNEL_SECT_COUNT db 2
 db 0x55, 0xaa
