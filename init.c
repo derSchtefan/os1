@@ -22,15 +22,15 @@ static void clear_bss(void)
     }
 }
 
-static char* __brk;
+unsigned int __heap;
 
 void *sbrk(int incr){
-    __brk += incr;
-    return (void*)__brk;
+    __heap += incr;
+    return (void*)__heap;
 }
 
 void init_brk() {
-    __brk = (char*) &_end;
+    __heap = &_end;
 }
 
 // Global (and static local) variables initialized to non-zero value
@@ -49,6 +49,7 @@ void __libc_init_array()
         if(i) (*i)();
     }
 }
+
 
 __attribute((used, section(".entry")))
 void _entry_point(void) {
