@@ -15,3 +15,17 @@ int __sprintf_chk(char * str, int flag, size_t strlen, const char * format, ...)
     return rv;
 }
 
+
+int vprintf(const char *, va_list);
+
+int __printf_chk(int flag, const char * format, ...)
+{
+    va_list arglist;
+    va_start( arglist, format );
+
+    int rv = vprintf(format, arglist);
+    
+    va_end( arglist );
+    return rv;
+}
+

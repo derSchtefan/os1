@@ -23,11 +23,23 @@ void setloc(unsigned int l) {
 }
 
 void putchar_(char c) {
+    if(c == '\n') {
+        _putchar_pos += 80;
+        // todo: scroll
+        return;
+    }
+    if(c == '\r') {
+        _putchar_pos = _putchar_pos % 80;
+        return;
+    }
+
     if(_putchar_pos < 80*25) {
         char *video_mem = (char*)(0x000b8000+(_putchar_pos*2));
         *(video_mem++) = c;
         *(video_mem++) = 0x03;
-    }
+        _putchar_pos++;
+    }    
+    // todo: scroll
 }
 
 int __errno = 0;
@@ -46,6 +58,12 @@ void execute_cpp();
 
 void kernel_main() {
     outstr_c(4, booted_msg);
+    
+    printf("Nein: %i\n\r", 12);
+    printf("Doch: %i\n\r", 12);
+
+
+    while(1);
 
     char *video_mem = (char*)(0x000b8000);
     memset(video_mem, 0, 8);
@@ -62,6 +80,8 @@ void kernel_main() {
     outstr_c(7, "allocd");
 
     execute_cpp();
+
+    printf("Nein: %i", 12);
 
     while(1);
 }
