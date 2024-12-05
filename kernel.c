@@ -42,6 +42,8 @@ static void pre_init(void) {
 
 extern unsigned int __heap;
 
+void execute_cpp();
+
 void kernel_main() {
     outstr_c(4, booted_msg);
 
@@ -58,6 +60,8 @@ void kernel_main() {
     char * x = malloc(3000);
     free(x);
     outstr_c(7, "allocd");
+
+    execute_cpp();
 
     while(1);
 }

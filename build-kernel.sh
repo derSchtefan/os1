@@ -2,21 +2,21 @@
 
 set -e
 
-#g++ -g -m32 -nostdlib -nolibc -nostartfiles  \
-#    -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fno-use-cxa-atexit \
-#    -r -o kernel_cpp.o cpp.cpp 
+g++ $1 $2 -m32 -nostdlib -nolibc -nostartfiles  \
+    -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fno-use-cxa-atexit \
+    -r -o kernel_cpp.elf cpp.cpp
+
 
 gcc -m32 \
     -nostdlib -Wl,-e_entry_point  \
     -T kernel.ld \
     -nolibc -nostartfiles  -fno-asynchronous-unwind-tables \
     $1 $2 \
-    mylibc/mylibc.elf \
     -o kernel.elf \
+    mylibc/mylibc.elf \
+    mylibcpp/mylibcpp.elf \
+    kernel_cpp.elf \
     init.c  kernel.c 
-
-    #mylibcpp/mylibcpp.elf \
-    #kernel_cpp.o \
 
 
 # objdump -D kernel.elf
