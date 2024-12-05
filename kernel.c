@@ -17,8 +17,11 @@ static void pre_init(void) {
     outstr_c(5, "pre-init");
 }
 
+void execute_cpp();
+
 void kernel_main() {
     outstr_c(4, booted_msg);
+    execute_cpp();
     while(1);
 }
 

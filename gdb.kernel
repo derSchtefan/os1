@@ -1,5 +1,6 @@
 target remote 192.168.11.60:1234
 set architecture i386
 b __libc_init_array
+b nurgo
 layout src
 c

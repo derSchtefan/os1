@@ -1,3 +1,4 @@
+*.o
 floppy.img
 zero
 bootsector
