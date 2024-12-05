@@ -47,7 +47,7 @@ void kernel_main() {
 
     char *video_mem = (char*)(0x000b8000);
     memset(video_mem, 0, 8);
-/*
+
     int flux = 4;
     char* f;
     int resu = asnprintf(&f, 100, "Fluxu: %i", flux);
@@ -57,7 +57,6 @@ void kernel_main() {
 
     char * x = malloc(3000);
     free(x);
-*/
     outstr_c(7, "allocd");
 
     while(1);
