@@ -10,7 +10,7 @@ gcc -m32 \
     -nostdlib -Wl,-e_entry_point  \
     -T kernel.ld \
     -nolibc -nostartfiles  -fno-asynchronous-unwind-tables \
-    $1 \
+    $1 $2 \
     mylibc/mylibc.elf \
     -o kernel.elf \
     init.c  kernel.c 

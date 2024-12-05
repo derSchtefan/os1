@@ -6,7 +6,7 @@ gcc -m32 \
     -nostdlib \
     -r \
     -nolibc -nostartfiles  -fno-asynchronous-unwind-tables \
-    -g \
+    $1 $2 \
     -o mylibc.elf \
     *.c
 
