@@ -31,14 +31,9 @@ static void copy_data(void)
     }
 }
 
-__attribute((used, constructor))
-static void function_called_before_main(void) {
-    
-}
-
 void __libc_init_array()
 {
-    for(libc_ctor* i = __init_array_start; (i < __init_array_end) && (i != 0); i++ ) {
+    for(libc_ctor* i = &__init_array_start; (i < &__init_array_end) && (i != 0); i++ ) {
         if(i) (*i)();
     }
 }

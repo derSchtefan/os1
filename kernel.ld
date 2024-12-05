@@ -1,12 +1,15 @@
 MEMORY
 {
-    STACK (rw) : ORIGIN = 0x00000500, LENGTH = 0x7B00
-    RAM (rw) : ORIGIN = 0x00008000, LENGTH = 0x7000
-    PROG (rwx) : ORIGIN = 0x0000F000, LENGTH = 0x71000
+    PROG (rwx) : ORIGIN = 0x00000700, LENGTH = 0x05F900     /* 391'424 bytes */
+    IOBUF (rw) : ORIGIN = 0x00060000, LENGTH = 0x020000     /* 2 * 64 K */
+    STACK (rw) : ORIGIN = 0x00100000, LENGTH = 0x100000     /* 1 meg */
+    RAM (rw)   : ORIGIN = 0x00200000, LENGTH = 0x400000     /* 4 meg */ 
 }
 
 _eram = ORIGIN(RAM) + LENGTH(RAM);
 _stack = ORIGIN(STACK) + LENGTH(STACK) - 1;
+_iobuf1 = ORIGIN(IOBUF);
+_iobuf2 = ORIGIN(IOBUF) + 0x010000;
 
 SECTIONS 
 {

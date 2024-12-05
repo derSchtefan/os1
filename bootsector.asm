@@ -1,29 +1,39 @@
 BITS 16
 
-STACK_END equ 0x0500
-STACK_START equ 0x7000
-STACK_START_2 equ 0x7FFF
-KERNEL_START equ 0xF000
+BOOT_LOADER_STACK_START equ 0x7000
+KERNEL_PROG_START   equ 0x000700
+KERNEL_STACK_END    equ 0x100000
+KERNEL_STACK_START  equ 0x1FFFFF
+KERNEL_HEAP_START   equ 0x200000
 
-[org 0x7c00]
-section BOOT start=0x7C00
+[org 0x0500]
+section BOOT start=0x0500
     cli
+    ; setup segments
     mov ax, 0
     mov ss, ax
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov sp, STACK_START
-    jmp 0:cs_reset
+    mov sp, BOOT_LOADER_STACK_START
+
+    ; relocate to start of conventional memory
+    mov di,0x0500
+    mov si,0x7C00
+    mov cx,512
+    rep movsb
+
+    jmp word 0:cs_reset
 cs_reset:
     sti
 
+    ; init 80x25 mode
     mov ah,0
     mov al,03h
     int 10h
 
-    mov al, '1'
+    mov al, 'A'
     call printch
 
 
@@ -33,7 +43,7 @@ cs_reset:
 
     mov ax, 0
     mov es, ax
-	mov bx, KERNEL_START		; target
+	mov bx, KERNEL_PROG_START		; target
  
 	mov ah, 2			; read sectors function
 	mov al, byte [KERNEL_SECT_COUNT]	        ; number of sectors
@@ -44,10 +54,8 @@ cs_reset:
 	int 13h				; call BIOS interrupt
 	jc disk_read_error
 
-    ; TODO: handle case when we read past 0xFFFF to go into next segment. we need to switch ES
 
-
-    mov al, '2'
+    mov al, 'B'
     call printch
 
 cli
@@ -71,9 +79,6 @@ BITS 32
     MOV   FS, EAX
     MOV   GS, EAX
     MOV   SS, EAX
-    
-
-
 
     mov [DS:0x000b8004], byte '3'
     mov [DS:0x000b8005], byte 0x1F
@@ -86,8 +91,8 @@ BITS 32
 
 ; sti
     ; jump to next section
-    MOV   ESP, STACK_START_2
-    jmp CODE_SEL:KERNEL_START
+    MOV   ESP, KERNEL_STACK_START
+    jmp CODE_SEL:KERNEL_PROG_START
 
 BOOTING_KERNEL_MESSAGE: db '32 bit enabled. Interrupts disabled. Booting Kernel Loader', 0
 
@@ -157,6 +162,6 @@ INITIAL_GDT_END_DESCRIPTOR:
 
 times 508-($-$$) db 0
 KERNEL_SECT_START db 2
-;KERNEL_SECT_COUNT db 64
+;KERNEL_SECT_COUNT db 124  max
 KERNEL_SECT_COUNT db 8
 db 0x55, 0xaa
