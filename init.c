@@ -7,6 +7,7 @@ extern unsigned int _edata;
 extern unsigned int _stack;
 extern unsigned int _bss;
 extern unsigned int _ebss;
+extern unsigned int _end;
 
 typedef void (*libc_ctor)(void);
 
@@ -19,6 +20,17 @@ static void clear_bss(void)
     while (bss_ptr < &_ebss) {
         *bss_ptr++ = 0;
     }
+}
+
+char* __brk;
+
+void *sbrk(int incr){
+    __brk += incr;
+    return (void*)__brk;
+}
+
+void init_brk() {
+    __brk = (char*) &_end;
 }
 
 // Global (and static local) variables initialized to non-zero value
@@ -40,10 +52,13 @@ void __libc_init_array()
 
 __attribute((used, section(".entry")))
 void _entry_point(void) {
+    init_brk();
+    /*
     copy_data();
     clear_bss();
     __libc_init_array();
     kernel_main();
+*/
 
     // We should never return from main, but just in case we do
     while(1);

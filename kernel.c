@@ -1,4 +1,4 @@
-//#include <string.h>
+#include <string.h>
 //#include <stdio.h>
 
 char* booted_msg = "Kernel message printed";
@@ -22,6 +22,9 @@ void execute_cpp();
 void kernel_main() {
     outstr_c(4, booted_msg);
     execute_cpp();
+
+    char *video_mem = (char*)(0x000b8000);
+    memset(video_mem, 0, 8);
     while(1);
 }
 

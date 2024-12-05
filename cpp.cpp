@@ -1,3 +1,5 @@
+#include <vector>
+
 extern "C" {
     void outstr_c(int line, char *str);
 }
@@ -7,6 +9,7 @@ class X {
 
 private:    
     int _loc;
+    
 
 public:
 
@@ -19,7 +22,18 @@ public:
         outstr_c(_loc, "BYE");
     }
 
+    void vv() {
+        std::vector<int> veci;
+        veci.push_back(5);
+        veci.push_back(5);
+        veci.push_back(5);
+        veci.push_back(5);
+    }
+
     void flux() {
+        
+
+
         outstr_c(_loc, "FLUXXXXXX");
     }
 };
@@ -33,6 +47,7 @@ extern "C" {
     void execute_cpp(){
         X x(10, "hiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         x.flux();
+        x.vv();
     }
 
 }

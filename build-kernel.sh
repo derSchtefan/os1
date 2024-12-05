@@ -12,13 +12,15 @@ gcc -m32 \
     -nolibc -nostartfiles  -fno-asynchronous-unwind-tables \
     $1 \
     -o kernel.elf \
+    mylibc/mylibc.elf \
+    mylibcpp/mylibcpp.elf \
     kernel_cpp.o \
     init.c  kernel.c 
 
 
-objdump -D kernel.elf
+# objdump -D kernel.elf
 
 objcopy --set-start 0x00000700 -j .text -j .init_array -j .data -j .rodata \
         -S kernel.elf -O binary kernel.bin 
         
-xxd kernel.bin
+# xxd kernel.bin
