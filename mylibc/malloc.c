@@ -63,10 +63,10 @@ void* malloc(unsigned nbytes) {
 /* Eine static-Funktion ist ausserhalb ihres Files nicht sichtbar	*/
 
 char *sbrk(int);
+void free(void *ap);
 
 static Header *morecore(unsigned nu) {
     char *cp;
-    void free(void*);
     Header *up;
     if (nu < NALLOC) nu = NALLOC;
     cp = sbrk(nu * sizeof(Header));	

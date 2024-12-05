@@ -22,7 +22,7 @@ static void clear_bss(void)
     }
 }
 
-char* __brk;
+static char* __brk;
 
 void *sbrk(int incr){
     __brk += incr;
@@ -53,12 +53,10 @@ void __libc_init_array()
 __attribute((used, section(".entry")))
 void _entry_point(void) {
     init_brk();
-    /*
     copy_data();
     clear_bss();
     __libc_init_array();
     kernel_main();
-*/
 
     // We should never return from main, but just in case we do
     while(1);
