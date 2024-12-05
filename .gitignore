@@ -1,7 +1,7 @@
 *.o
-floppy.img
+*.img
 zero
 bootsector
-kernel.elf
-kernel.bin
+*.elf
+*.bin
 floppyroot
