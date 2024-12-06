@@ -56,16 +56,16 @@ static void pre_init(void) {
 }
 
 extern unsigned int __heap;
-extern int last_int_no;
+extern volatile int last_int_no;
+extern volatile int int_call_count;
 
 void execute_cpp();
 
 void idt_init();
 
 void fff(){
+    asm volatile ("int $0x80");
     asm volatile ("sti");
-asm volatile ("int $0x80");
-
 }
 
 void kernel_main() {
@@ -112,6 +112,9 @@ void kernel_main() {
         char* msg;
         asnprintf(&msg, 100, "Last Int: %i     ", last_int_no);
         outstr_c(20, msg);
+        free(msg);
+        asnprintf(&msg, 100, "Int Count: %i     ", int_call_count);
+        outstr_c(21, msg);
         free(msg);
     }
 }

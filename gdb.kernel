@@ -1,8 +1,8 @@
 target remote 192.168.11.60:1234
 set architecture i386
-b exception_handler_with_error_code
-b exception_handler_no_error_code
-b interrupt_gen_handler
-b interrupt_80h_handler
+b central_interrupt_handler
+b isr_jump_table_start
+b isr_c_trampoline
+b idt_init
 layout src
 c

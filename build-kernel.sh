@@ -6,7 +6,7 @@ g++ $1 $2 -m32 -nostdlib -nolibc -nostartfiles  \
     -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fno-use-cxa-atexit \
     -r -o kernel_cpp.elf cpp.cpp
 
-
+nasm -f elf32 -g -o isr_ll.elf isr_ll.asm
 
 gcc -m32 \
     -nostdlib \
@@ -27,6 +27,7 @@ gcc -m32 \
     mylibcpp/mylibcpp.elf \
     kernel_cpp.elf \
     interrupts.elf \
+    isr_ll.elf \
     init.c  kernel.c 
 
 

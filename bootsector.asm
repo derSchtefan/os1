@@ -26,8 +26,7 @@ section BOOT start=0x0500
 
     jmp word 0:cs_reset
 cs_reset:
-    sti
-
+    
     ; init 80x25 mode
     mov ah,0
     mov al,03h
