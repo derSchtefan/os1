@@ -1,9 +1,8 @@
 target remote 192.168.11.60:1234
 set architecture i386
-b _entry_point
-b sbrk
-b init_brk
-b free
-b malloc
+b exception_handler_with_error_code
+b exception_handler_no_error_code
+b interrupt_gen_handler
+b interrupt_80h_handler
 layout src
 c

@@ -4,9 +4,12 @@
 #include <malloc.h>
 #include "snprintf.h"
 
-char* booted_msg = "Kernel message printed";
+char* booted_msg = "Kernel ready";
 
-
+void clearscr(){
+    char *video_mem = (char*)(0x000b8000);
+    memset(video_mem, 0, 80*25*2);
+}
 
 int outstr_c(int line, char *str) {
     char *video_mem = (char*)(0x000b8000+(line*80*2));
@@ -53,17 +56,24 @@ static void pre_init(void) {
 }
 
 extern unsigned int __heap;
+extern int last_int_no;
 
 void execute_cpp();
 
+void idt_init();
+
+void fff(){
+    asm volatile ("sti");
+asm volatile ("int $0x80");
+
+}
+
 void kernel_main() {
-    outstr_c(4, booted_msg);
-    
+    /*
     printf("Nein: %i\n\r", 12);
     printf("Doch: %i\n\r", 12);
 
 
-    while(1);
 
     char *video_mem = (char*)(0x000b8000);
     memset(video_mem, 0, 8);
@@ -82,8 +92,28 @@ void kernel_main() {
     execute_cpp();
 
     printf("Nein: %i", 12);
+    */
 
-    while(1);
+    clearscr();
+
+    idt_init();
+    outstr_c(4, booted_msg);
+/*
+    int a = 1;
+    int b = 0;
+    int c = a / b;
+*/
+    
+
+    fff();
+
+
+    while(1){
+        char* msg;
+        asnprintf(&msg, 100, "Last Int: %i     ", last_int_no);
+        outstr_c(20, msg);
+        free(msg);
+    }
 }
 
 

@@ -7,6 +7,16 @@ g++ $1 $2 -m32 -nostdlib -nolibc -nostartfiles  \
     -r -o kernel_cpp.elf cpp.cpp
 
 
+
+gcc -m32 \
+    -nostdlib \
+    -nolibc -nostartfiles  -fno-asynchronous-unwind-tables \
+    -mgeneral-regs-only \
+    -r \
+    $1 $2 \
+    -o interrupts.elf \
+    interrupts.c
+
 gcc -m32 \
     -nostdlib -Wl,-e_entry_point  \
     -T kernel.ld \
@@ -16,6 +26,7 @@ gcc -m32 \
     mylibc/mylibc.elf \
     mylibcpp/mylibcpp.elf \
     kernel_cpp.elf \
+    interrupts.elf \
     init.c  kernel.c 
 
 
