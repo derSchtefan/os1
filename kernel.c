@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
+#include <stdint.h>
 #include "snprintf.h"
 
 char* booted_msg = "Kernel ready";
@@ -25,6 +26,7 @@ void setloc(unsigned int l) {
     _putchar_pos = l;
 }
 
+
 void putchar_(char c) {
     if(c == '\n') {
         _putchar_pos += 80;
@@ -43,6 +45,10 @@ void putchar_(char c) {
         _putchar_pos++;
     }    
     // todo: scroll
+}
+
+int putchar(int c) {
+    putchar_(c); 
 }
 
 int __errno = 0;
@@ -67,6 +73,7 @@ void fff(){
     asm volatile ("int $0x80");
     asm volatile ("sti");
 }
+void keyboard_install() ;
 
 void kernel_main() {
     /*
@@ -98,15 +105,17 @@ void kernel_main() {
 
     idt_init();
     outstr_c(4, booted_msg);
-/*
+
+    /*
     int a = 1;
     int b = 0;
     int c = a / b;
-*/
+    */  
     
 
     fff();
 
+    keyboard_install();
 
     while(1){
         char* msg;

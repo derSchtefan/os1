@@ -28,7 +28,7 @@ gcc -m32 \
     kernel_cpp.elf \
     interrupts.elf \
     isr_ll.elf \
-    init.c  kernel.c 
+    init.c  kernel.c keyboard.c
 
 
 # objdump -D kernel.elf
