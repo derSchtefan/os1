@@ -55,8 +55,8 @@ __attribute((used, section(".entry")))
 void _entry_point(void) {
     copy_data();
     clear_bss();
-    __libc_init_array();
     init_brk();
+    __libc_init_array();
     
     kernel_main();
 
