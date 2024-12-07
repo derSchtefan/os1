@@ -10,7 +10,7 @@
 static const char characterTable[] = {
     0,    0,    '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '0',
     '-',  '=',  0,    0x09, 'q',  'w',  'e',  'r',  't',  'y',  'u',  'i',
-    'o',  'p',  '[',  ']',  0,    0,    'a',  's',  'd',  'f',  'g',  'h',
+    'o',  'p',  '[',  ']',  '\n',   0,    'a',  's',  'd',  'f',  'g',  'h',
     'j',  'k',  'l',  ';',  '\'', '`',  0,    '\\', 'z',  'x',  'c',  'v',
     'b',  'n',  'm',  ',',  '.',  '/',  0,    '*',  0x0F, ' ',  0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -51,6 +51,7 @@ typedef void (*registered_irq_handler)(interruptFrame *regs);
 
 void registerIRQhandler(uint8_t id, registered_irq_handler handler);
 
+void printf_loc(int line, const char*fmt, ...);
 
 static bool leftShiftDown = false;
 static bool rightShiftDown = false;
@@ -63,6 +64,8 @@ void keyboard_handler(interruptFrame frame) {
     if(scancode == 0) {
         return;
     }
+
+    printf_loc( 15, "%X ", (unsigned int)scancode);
 
     if(scancode == 0x2A){
         leftShiftDown = true;

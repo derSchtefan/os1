@@ -1,8 +1,6 @@
 target remote 192.168.11.60:1234
 set architecture i386
-b central_interrupt_handler
-b isr_jump_table_start
-b isr_c_trampoline
-b idt_init
+b sbrk
+b init_brk
 layout src
 c

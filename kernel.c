@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +21,18 @@ int outstr_c(int line, char *str) {
     }    
 }
 
+void printf_loc(int line, const char*fmt, ...) {
+    va_list arglist;
+    va_start( arglist, fmt );
+
+    char* msg;
+    vasnprintf(&msg, 1024, fmt, arglist);
+    outstr_c(line, msg);
+    free(msg);
+    
+    va_end( arglist );
+}
+
 static unsigned int _putchar_pos = 0;
 
 void setloc(unsigned int l) {
@@ -27,9 +40,12 @@ void setloc(unsigned int l) {
 }
 
 
-void putchar_(char c) {
+void putchar_(unsigned char c) {
+    printf_loc(18, "%X  ", (unsigned int)c);
+
     if(c == '\n') {
         _putchar_pos += 80;
+        _putchar_pos = _putchar_pos - (_putchar_pos % 80);
         // todo: scroll
         return;
     }
@@ -61,7 +77,7 @@ static void pre_init(void) {
     outstr_c(5, "pre-init");
 }
 
-extern unsigned int __heap;
+extern volatile unsigned int __heap;
 extern volatile int last_int_no;
 extern volatile int int_call_count;
 
@@ -75,10 +91,11 @@ void fff(){
 }
 void keyboard_install() ;
 
+
 void kernel_main() {
     /*
-    printf("Nein: %i\n\r", 12);
-    printf("Doch: %i\n\r", 12);
+    printf("Nein: %i\n", 12);
+    printf("Doch: %i\n", 12);
 
 
 
@@ -118,13 +135,11 @@ void kernel_main() {
     keyboard_install();
 
     while(1){
-        char* msg;
-        asnprintf(&msg, 100, "Last Int: %i     ", last_int_no);
-        outstr_c(20, msg);
-        free(msg);
-        asnprintf(&msg, 100, "Int Count: %i     ", int_call_count);
-        outstr_c(21, msg);
-        free(msg);
+        printf_loc(20, "Last Int: %i     ", last_int_no);
+        printf_loc(21, "Int Count: %i     ", int_call_count);
+        printf_loc(22, "BRK: %x     ", __heap);
+        register void *esp asm ("esp");
+        printf_loc(23, "ESP: %x     ", esp);
     }
 }
 
